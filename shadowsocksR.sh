@@ -258,10 +258,10 @@ config_shadowsocks(){
     "local_port":1080,
     "password":"${shadowsockspwd}",
     "timeout":120,
-    "method":"aes-256-cfb",
-    "protocol":"origin",
+    "method":"chacha20",
+    "protocol":"auth_sha1_v4",
     "protocol_param":"",
-    "obfs":"plain",
+    "obfs":"tls1.2_ticket_auth",
     "obfs_param":"",
     "redirect":"",
     "dns_ipv6":false,
@@ -270,7 +270,14 @@ config_shadowsocks(){
 }
 EOF
 }
-
+config_dns(){
+    cat > /etc/dns.conf<<-EOF
+{
+8.8.8.8
+8.8.4.4
+}
+EOF
+}
 # Install ShadowsocksR
 install(){
     # Install libsodium
@@ -286,8 +293,9 @@ install(){
     ldconfig
     # Install ShadowsocksR
     cd ${cur_dir}
-    unzip -q manyuser.zip
-    mv shadowsocks-manyuser/shadowsocks /usr/local/
+    #unzip -q manyuser.zip
+    #mv shadowsocks-manyuser/shadowsocks /usr/local/
+    git clone -b manyuser https://github.com/breakwa11/shadowsocks.git /usr/local/shadowsocks
     if [ -f /usr/local/shadowsocks/server.py ]; then
         chmod +x /etc/init.d/shadowsocks
         if check_sys packageManager yum; then
