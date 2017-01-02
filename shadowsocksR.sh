@@ -258,8 +258,8 @@ config_shadowsocks(){
     "local_port":1080,
     "password":"${shadowsockspwd}",
     "timeout":120,
-    "method":"chacha20",
-    "protocol":"auth_sha1_v4",
+    "method":"aes-256-cfb",
+    "protocol":"auth_aes128_md5",
     "protocol_param":"",
     "obfs":"tls1.2_ticket_auth",
     "obfs_param":"",
@@ -271,7 +271,7 @@ config_shadowsocks(){
 EOF
 }
 config_dns(){
-    cat > /etc/dns.conf<<-EOF
+    cat > /usr/local/shadowsocks/shadowsocks/dns.conf<<-EOF
 {
 8.8.8.8
 8.8.4.4
